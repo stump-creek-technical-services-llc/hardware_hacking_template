@@ -1,5 +1,5 @@
 GIT_DIR := $(shell git rev-parse --show-toplevel)
-include $(GIT_DIR)/device.sh
+include $(GIT_DIR)/device.properties
 include $(HARDWARE_HACKING_ROOT)/include/make/flavor.mk
 
 # This file is meant to run on GNU/Linux
@@ -8,7 +8,7 @@ include $(HARDWARE_HACKING_ROOT)/include/make/flavor.mk
 # Ubuntu/Debian: sudo apt install sleuthkit binwalk xxd coreutils
 
 GIT_DIR := $(shell git rev-parse --show-toplevel)
-include $(GIT_DIR)/device.sh
+include $(GIT_DIR)/device.properties
 
 FIRMWARE_ANALYSIS_DIR=$(GIT_DIR)/firmware-analysis
 
@@ -19,7 +19,7 @@ OUTPUT_DIR := $(FIRMWARE_ANALYSIS_DIR)/output
 OUTPUT_ANALYSIS_DIR := $(OUTPUT_DIR)/$(FILENAME).analysis
 LOCAL_BINWALK := $(GIT_DIR)/../../tools/binwalk/target/release/binwalk
 
-.PHONY: analysis clean extractions hash check
+.PHONY: analysis clean extractions hash check entropy fsstat
 
 all: check analysis
 #	make analysis FILE=$(GIT_DIR)/firmware-images/firmware-free.bin
@@ -28,8 +28,11 @@ analysis: \
 		check \
 		$(OUTPUT_ANALYSIS_DIR) \
 		extractions \
-		$(OUTPUT_ANALYSIS_DIR)/entropy \
-		$(OUTPUT_ANALYSIS_DIR)/fsstat
+		entropy
+
+entropy: $(OUTPUT_ANALYSIS_DIR)/entropy
+
+fsstat: $(OUTPUT_ANALYSIS_DIR)/fsstat
 
 clean:
 	rm -rf $(OUTPUT_DIR)
@@ -51,9 +54,9 @@ $(OUTPUT_ANALYSIS_DIR)/bootloader.bin: $(OUTPUT_ANALYSIS_DIR)
 	dd if=$(FILE) of=$(OUTPUT_ANALYSIS_DIR)/bootloader.bin bs=1 skip=62 count=448
 	bin2hex $(OUTPUT_ANALYSIS_DIR)/bootloader.bin
 
-hash: $(OUTPUT_ANALYSIS_DIR)
+$(OUTPUT_ANALYSIS_DIR)/sha256sums: $(OUTPUT_ANALYSIS_DIR)
 	sha256sum $(FILE) >> $(OUTPUT_ANALYSIS_DIR)/sha256sums
 
-check: $(OUTPUT_ANALYSIS_DIR)
+check: $(OUTPUT_ANALYSIS_DIR)/sha256sums
 	sha256sum -c $(OUTPUT_ANALYSIS_DIR)/sha256sums || true
 
