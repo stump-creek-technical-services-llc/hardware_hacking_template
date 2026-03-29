@@ -9,6 +9,7 @@ include $(HARDWARE_HACKING_ROOT)/include/make/flavor.mk
 
 GIT_DIR := $(shell git rev-parse --show-toplevel)
 include $(GIT_DIR)/device.properties
+DEV_TAG_SC := $(shell echo "${DEV_TAG}" | tr "[:upper:]" "[:lower:]")
 
 FIRMWARE_ANALYSIS_DIR=$(GIT_DIR)/firmware-analysis
 
