@@ -21,9 +21,7 @@ TEE=tee -a $(LOG_PATH)
 all: \
 	$(OUTPUT_DIR) \
 	$(OUTPUT_PATH) \
-	$(OUTPUT_DIR)/sha256sums \
 	$(FW_IMAGES_LINK_PATH) \
-	$(FW_IMAGES_DIR)/sha256sums \
 	$(FW_IMAGES_HEX_PATH)
 
 $(OUTPUT_DIR):
@@ -35,12 +33,7 @@ $(OUTPUT_PATH): $(OUTPUT_DIR)
 	git -C $(OUTPUT_DIR) stash
 	git -C $(OUTPUT_DIR) add $(OUTPUT_PATH)
 	git -C $(OUTPUT_DIR) commit -m "Added $(FLAVOR) firmware for $(DEV_TAG)"
-	git -C $(OUTPUT_DIR) push
-	git -C $(OUTPUT_DIR) stash pop || true
-
-$(OUTPUT_DIR)/sha256sums: $(OUTPUT_PATH)
-	cd $(OUTPUT_DIR) && sha256sum $(OUTPUT_PATH) >> sha256sums
-	git -C $(OUTPUT_DIR) stash
+	$(shell cd $(OUTPUT_DIR) && sha256sum $(OUTPUT_PATH) >> sha256sums)
 	git -C $(OUTPUT_DIR) add sha256sums
 	git -C $(OUTPUT_DIR) commit -m "Updated sha256sums $(OUTPUT_FILENAME)"
 	git -C $(OUTPUT_DIR) push
@@ -48,9 +41,7 @@ $(OUTPUT_DIR)/sha256sums: $(OUTPUT_PATH)
 
 $(FW_IMAGES_LINK_PATH): $(OUTPUT_PATH)
 	ln -sf $(OUTPUT_PATH) $(FW_IMAGES_LINK_PATH)
-
-$(FW_IMAGES_DIR)/sha256sums: $(FW_IMAGES_LINK_PATH)
-	cd $(FW_IMAGES_DIR) && sha256sum $(FW_IMAGES_LINK_PATH) >> sha256sums
+	$(shell cd $(FW_IMAGES_DIR) && sha256sum $(FW_IMAGES_LINK_PATH) >> sha256sums)
 
 $(FW_IMAGES_HEX_PATH): $(FW_IMAGES_LINK_PATH)
 	LANG=C bin2hex $(OUTPUT_FILENAME) | $(TEE)
