@@ -1,6 +1,9 @@
 # ${DEV_TAG}
 
-(photos)
+* [Manufacturer ref]()
+* [Source]()
+
+
 
 
 
@@ -11,43 +14,25 @@
 - [ ] Reference materials
     - [ ] Manufacturer docs
     - [ ] Firmware updates
-    - [ ] OpenWRT support
-    - [ ] Pinouts
+    - [ ] Third-party references
 - [ ] Factory reset
 - [ ] External documentation
-- [ ] Case opened
 - [ ] Internal documentation
-- [ ] Dumped ROM .reset
-- [ ] Extracted FW parts, inspected
-- [ ] Factory reset with boot
-- [ ] Dumped ROM regular
-- [ ] Booted
-- [ ] Root shell
-- [ ] Pull stats
-    - [ ] `uname -a`
-    - [ ] `busybox --help`
-    - [ ] `cat /proc/mtd`
+- [ ] Dumped ROM
 
 ## Critical Info
 
-(photo)
+
 
 External label:
 
 ```text
-Serial no.: 
-Input Voltage: XX VDC: XX A -@+
 ```
 
 ## Reference material:
 
-* [Product Link]()
 * [Firmware update]()
 * [Open firmware]()
-
-## Opening
-
-(Screws?)
 
 ## Board
 
@@ -57,22 +42,16 @@ Markings:
 
 ```
 
-### Chip
+### Component
 
-(photo)
+photo
 
-Package
-
-Markings:
-
+* [Datasheet]()
+* [Manufacturer page]()
+* Package: 
+* Markings:
 ```text
 ```
-
-[Datasheet]
-
-Description (source):
-
-
 
 ## Firmware
 
